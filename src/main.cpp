@@ -9,9 +9,10 @@
 #include <SDL.h>
 #include <rtrb.h>
 
-constexpr float sample_rate = 44100;
+constexpr int sample_rate = 44100;
 constexpr float a4_freq = 440.0;
 constexpr float volume = 0.5;
+constexpr std::size_t sample_buf_size = 4096;
 
 std::atomic_flag flag = ATOMIC_FLAG_INIT;
 
@@ -19,10 +20,10 @@ void SDLCALL audio_callback(void *user_data, std::uint8_t *stream, int len)
 {
     auto *rb = static_cast<rtrb *>(user_data);
 
-    auto read = rtrb_read(rb, stream, len);
+    auto read = rtrb_read(rb, stream, static_cast<std::size_t>(len));
 
     // Zero leftover bytes, if any.
-    for (size_t i = read; i < len; ++i)
+    for (std::size_t i = read; i < static_cast<std::size_t>(len); ++i)
     {
         stream[i] = 0;
     }
@@ -31,7 +32,7 @@ void SDLCALL audio_callback(void *user_data, std::uint8_t *stream, int len)
     flag.notify_one();
 }
 
-int main(int argc, char *argv[])
+int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_EVENTS))
     {
@@ -39,11 +40,11 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    rtrb *rb = rtrb_new(4096 * sizeof(float));
+    rtrb *rb = rtrb_new(sample_buf_size * sizeof(float));
 
     std::thread thread(
         [](rtrb *rb) {
-            std::array<float, 4096> sample_buf;
+            std::array<float, sample_buf_size> tmp_sample_buf;
 
             float step = 2.0f * std::numbers::pi_v<float> / (sample_rate / a4_freq);
             float t = 0;
@@ -56,12 +57,12 @@ int main(int argc, char *argv[])
                 for (size_t i = 0; i < samples; ++i)
                 {
                     t += step;
-                    sample_buf[i] = std::sinf(t) * volume;
+                    tmp_sample_buf[i] = std::sinf(t) * volume;
                 }
 
                 // Accessing the pointer after the cast to std::uint8_t* might
                 // be UB?
-                rtrb_write(rb, reinterpret_cast<std::uint8_t *>(sample_buf.data()), available_bytes);
+                rtrb_write(rb, reinterpret_cast<std::uint8_t *>(tmp_sample_buf.data()), available_bytes);
 
                 flag.wait(false);
                 flag.clear();
@@ -71,10 +72,10 @@ int main(int argc, char *argv[])
 
     SDL_AudioSpec desired, obtained;
     std::memset(&desired, 0, sizeof(desired));
-    desired.freq = 44100;
+    desired.freq = sample_rate;
     desired.format = AUDIO_F32;
     desired.channels = 1;
-    desired.samples = 4096;
+    desired.samples = sample_buf_size;
     desired.callback = audio_callback;
     desired.userdata = rb;
 
