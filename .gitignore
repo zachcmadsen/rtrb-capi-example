@@ -1,0 +1,8 @@
+# Cargo build directory
+/target
+
+# CMake build directory
+/build
+
+# clangd cache
+/.cache
