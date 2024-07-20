@@ -1,6 +1,6 @@
 # rtrb-capi-example
 
-An example program that uses [`rtrb-capi`][rtrb-capi] and `SDL`[sdl] to play a
+An example program that uses [`rtrb-capi`][rtrb-capi] and [SDL][sdl] to play a
 note.
 
 A producer thread generates and writes samples to an `rtrb` ring buffer. The SDL
