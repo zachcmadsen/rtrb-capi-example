@@ -21,13 +21,20 @@ message(STATUS "Fetching SDL2...")
 FetchContent_MakeAvailable(SDL2)
 
 add_executable(rtrb-example main.cpp)
-target_link_libraries(rtrb-example PRIVATE rtrb::rtrb-static SDL2::SDL2main SDL2::SDL2)
+target_link_libraries(rtrb-example PRIVATE rtrb::rtrb-shared SDL2::SDL2main SDL2::SDL2)
 
 # Output the rtrb-example executable to the bin subdirectory.
 set_target_properties(rtrb-example PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-# Copy SDL2.dll to rtrb-example's output directory.
+# Copy rtrb_capi.dll and SDL2.dll to rtrb-example's output directory.
 if (WIN32)
+        add_custom_command(
+        TARGET rtrb-example
+        POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:rtrb::rtrb-shared>" "$<TARGET_FILE_DIR:rtrb-example>"
+        VERBATIM
+    )
+
     add_custom_command(
         TARGET rtrb-example
         POST_BUILD
