@@ -8,7 +8,7 @@ audio callback then reads samples from the ring buffer.
 
 ## Build
 
-You need Rust, Cargo, CMake, and a C compiler installed.
+You need Rust, Cargo, CMake, and a C/C++ compiler installed.
 
 Configure and build the project:
 
@@ -17,8 +17,8 @@ $ cmake -S . -B build
 $ cmake --build build
 ```
 
-You should be able to run `./build/bin/rtrb-example` (the path to `rtrb-example`
-in the `bin` directory may be different for you) and hear a note.
+Then run `./build/src/rtrb-example` (the path to `rtrb-example` may be different
+for you).
 
 ## Acknowledgements
 

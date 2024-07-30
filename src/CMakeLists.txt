@@ -2,8 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     rtrb
-    GIT_REPOSITORY  https://github.com/zachcmadsen/rtrb-capi
-    GIT_TAG main
+    URL https://github.com/zachcmadsen/rtrb-capi/releases/download/v0.1.0/rtrb-src.tar.gz
 )
 message(STATUS "Fetching rtrb-capi...")
 FetchContent_MakeAvailable(rtrb)
