@@ -3,7 +3,7 @@ include(FetchContent)
 FetchContent_Declare(
     rtrb
     GIT_REPOSITORY  https://github.com/zachcmadsen/rtrb-capi
-    GIT_TAG zach/corrosion
+    GIT_TAG main
 )
 message(STATUS "Fetching rtrb-capi...")
 FetchContent_MakeAvailable(rtrb)
@@ -22,9 +22,10 @@ FetchContent_MakeAvailable(SDL2)
 
 add_executable(rtrb-example main.cpp)
 target_link_libraries(rtrb-example PRIVATE rtrb::rtrb SDL2::SDL2main SDL2::SDL2)
+target_compile_features(rtrb-example PRIVATE cxx_std_20)
 
-# Copy SDL2.dll to rtrb-example's output directory.
 if(WIN32)
+    # Copy SDL2.dll to rtrb-example's output directory.
     add_custom_command(
         TARGET rtrb-example
         POST_BUILD
