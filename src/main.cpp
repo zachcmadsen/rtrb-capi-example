@@ -58,7 +58,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
                 for (size_t i = 0; i < samples; ++i)
                 {
                     t += step;
-                    tmp_sample_buf[i] = std::sinf(t) * volume;
+                    tmp_sample_buf[i] = std::sin(t) * volume;
                 }
 
                 // Accessing the pointer after the cast to std::uint8_t* might
