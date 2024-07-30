@@ -2,6 +2,7 @@
 #include <atomic>
 #include <cmath>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <numbers>
 #include <thread>
