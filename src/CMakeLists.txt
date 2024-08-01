@@ -2,7 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(
     rtrb
-    URL https://github.com/zachcmadsen/rtrb-capi/releases/download/v0.1.0/rtrb-src.tar.gz
+    URL https://github.com/zachcmadsen/rtrb-capi/releases/download/v0.1.1/rtrb-src.tar.gz
 )
 message(STATUS "Fetching rtrb-capi...")
 FetchContent_MakeAvailable(rtrb)
@@ -19,7 +19,8 @@ FetchContent_Declare(
 message(STATUS "Fetching SDL2...")
 FetchContent_MakeAvailable(SDL2)
 
-add_executable(rtrb-example main.cpp)
+add_executable(rtrb-example)
+target_sources(rtrb-example PRIVATE main.cpp)
 target_link_libraries(rtrb-example PRIVATE rtrb::rtrb SDL2::SDL2main SDL2::SDL2)
 target_compile_features(rtrb-example PRIVATE cxx_std_20)
 
