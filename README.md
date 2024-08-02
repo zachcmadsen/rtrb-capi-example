@@ -3,8 +3,8 @@
 An example program that uses [`rtrb-capi`][rtrb-capi] and [SDL][sdl] to play a
 note.
 
-A producer thread generates and writes samples to an `rtrb` ring buffer. The SDL
-audio callback then reads samples from the ring buffer.
+A producer thread writes audio samples to an `rtrb` ring buffer. An SDL audio
+callback then reads samples from that ring buffer.
 
 ## Build
 
@@ -18,7 +18,7 @@ $ cmake --build build
 ```
 
 Then run `./build/src/rtrb-example` (the path to `rtrb-example` may be different
-for you).
+for you). The program should play a note for four seconds and exit.
 
 ## Acknowledgements
 
