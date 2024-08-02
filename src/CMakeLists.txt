@@ -22,7 +22,7 @@ FetchContent_MakeAvailable(SDL2)
 add_executable(rtrb-example)
 target_sources(rtrb-example PRIVATE main.cpp)
 target_link_libraries(rtrb-example PRIVATE rtrb::rtrb SDL2::SDL2main SDL2::SDL2)
-target_compile_features(rtrb-example PRIVATE cxx_std_20)
+target_compile_features(rtrb-example PRIVATE cxx_std_23)
 
 if(WIN32)
     # Copy SDL2.dll to rtrb-example's output directory.
